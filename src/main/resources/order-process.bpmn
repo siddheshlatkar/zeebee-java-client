@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" id="Definitions_07m7xkw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.11.0">
+  <bpmn:process id="order-process" name="Order Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Order placed">
+      <bpmn:outgoing>Flow_1uzfbu0</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_1qf08uw" name="Order delivered">
+      <bpmn:incoming>Flow_17zyxhl</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0jsi1ga" sourceRef="payment-service-task-1" targetRef="Activity_0ny4lgl" />
+    <bpmn:sequenceFlow id="Flow_0z05hxr" sourceRef="Activity_0ny4lgl" targetRef="Activity_08unsm1" />
+    <bpmn:sequenceFlow id="Flow_17zyxhl" sourceRef="Activity_08unsm1" targetRef="Event_1qf08uw" />
+    <bpmn:sequenceFlow id="Flow_1uzfbu0" sourceRef="StartEvent_1" targetRef="payment-service-task-1" />
+    <bpmn:serviceTask id="payment-service-task-1" name="Collect Money">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="payment-service" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1uzfbu0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jsi1ga</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0ny4lgl" name="Fetch Items">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="fetcher-service" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0jsi1ga</bpmn:incoming>
+      <bpmn:outgoing>Flow_0z05hxr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_08unsm1" name="Ship Product">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="shipping-service" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0z05hxr</bpmn:incoming>
+      <bpmn:outgoing>Flow_17zyxhl</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="order-process">
+      <bpmndi:BPMNEdge id="Flow_0jsi1ga_di" bpmnElement="Flow_0jsi1ga">
+        <di:waypoint x="410" y="110" />
+        <di:waypoint x="460" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z05hxr_di" bpmnElement="Flow_0z05hxr">
+        <di:waypoint x="560" y="110" />
+        <di:waypoint x="610" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17zyxhl_di" bpmnElement="Flow_17zyxhl">
+        <di:waypoint x="710" y="110" />
+        <di:waypoint x="866" y="110" />
+        <di:waypoint x="866" y="97" />
+        <di:waypoint x="1022" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uzfbu0_di" bpmnElement="Flow_1uzfbu0">
+        <di:waypoint x="215" y="97" />
+        <di:waypoint x="263" y="97" />
+        <di:waypoint x="263" y="110" />
+        <di:waypoint x="310" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="165" y="122" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1qf08uw_di" bpmnElement="Event_1qf08uw">
+        <dc:Bounds x="1022" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1002" y="122" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1xlb48z_di" bpmnElement="payment-service-task-1">
+        <dc:Bounds x="310" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1awf4d8_di" bpmnElement="Activity_0ny4lgl">
+        <dc:Bounds x="460" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qwu9c9_di" bpmnElement="Activity_08unsm1">
+        <dc:Bounds x="610" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
